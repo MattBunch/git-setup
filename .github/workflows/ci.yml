@@ -1,0 +1,36 @@
+name: CI
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y shellcheck
+      - name: Bash syntax and ShellCheck
+        run: |
+          find . -name '*.sh' -not -path './.git/*' -print0 | xargs -0 -n 1 bash -n
+          find . -name '*.sh' -not -path './.git/*' -exec shellcheck {} +
+  linux:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ['fedora:44', 'ubuntu:24.04', 'debian:13']
+    container: ${{ matrix.image }}
+    steps:
+      - name: Install test prerequisites
+        run: |
+          if command -v dnf >/dev/null; then
+            dnf install -y git diffutils
+          else
+            apt-get update
+            apt-get install -y git diffutils
+          fi
+      - uses: actions/checkout@v4
+      - name: Isolated installer tests
+        run: bash tests/install.sh

@@ -1,0 +1,5 @@
+*.local
+*.backup-*
+*.bak
+*.swp
+.DS_Store
