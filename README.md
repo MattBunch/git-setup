@@ -5,7 +5,7 @@ Portable Git defaults that fit alongside your existing configuration.
 ## Features
 
 - Short aliases: `st`, `sw`, `br`, `ci`, `unstage`, `last`, and `lg`.
-- New repositories use `main`; pulls require a fast-forward; fetch removes stale remote branches.
+- New repositories use `master`; pulls require a fast-forward; fetch removes stale remote branches.
 - Histogram diffs, moved-line highlighting, and conflict markers with the original text.
 - Uses delta when available, otherwise less or plain output.
 
@@ -16,7 +16,7 @@ and line-ending settings are left to you.
 
 Fedora, Ubuntu/Debian, and WSL2 with Bash and Git 2.34+.
 Install Git first: `sudo dnf install git diffutils` or `sudo apt install git diffutils`.
-The installer never installs packages or uses sudo. Delta is optional.
+The default installer never installs packages or uses sudo. Delta is optional.
 
 ## Install
 
@@ -26,7 +26,22 @@ cd ~/Projects
 git clone https://github.com/MattBunch/git-setup.git
 cd git-setup
 ./install.sh
+# Or also install GitHub CLI:
+./install.sh --with-gh
 ```
+
+GitHub CLI (`gh`) lets you work with GitHub from the terminal. It is optional;
+the installer supports Fedora, Ubuntu and Debian, including WSL2. If `gh` is
+already installed, its version is shown and installation is skipped. Otherwise,
+the helper explains its package and repository changes and asks before using sudo.
+Afterwards, authenticate when you choose:
+
+```bash
+gh auth login
+gh auth status
+```
+
+Authentication is never performed automatically.
 
 The installer links configuration and a pager under
 `${XDG_CONFIG_HOME:-$HOME/.config}/git-setup`. It adds marked include blocks to
@@ -66,7 +81,7 @@ git pull --ff-only
 ./install.sh --uninstall
 ```
 
-Uninstall removes this checkout's includes and owned links, keeping your settings
+Uninstall removes this checkout's includes and owned links, keeping GitHub CLI, your settings
 and backups. To restore a backup, inspect it first, move the current file aside,
 then run `mv -- '/path/to/file.backup-TIMESTAMP' '/path/to/file'`.
 Backups may contain private settings; keep them private.
