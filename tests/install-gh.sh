@@ -22,7 +22,7 @@ fi
 MOCK
 cat > "$MOCK_BIN/dnf" <<'MOCK'
 #!/usr/bin/env bash
-echo "${MOCK_DNF_VERSION:-5.0}"
+echo "${MOCK_DNF_VERSION:-dnf5 version 5.2.17.0}"
 MOCK
 cat > "$MOCK_BIN/apt-get" <<'MOCK'
 #!/usr/bin/env bash

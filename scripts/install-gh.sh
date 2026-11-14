@@ -16,6 +16,7 @@ case $id in
     fedora)
         command -v dnf >/dev/null 2>&1 || fail 'Fedora requires dnf.'
         version=$(dnf --version | head -n 1)
+        version=${version#dnf5 version }
         case $version in 5.*) dnf_version=5 ;; 4.*) dnf_version=4 ;; *) fail 'Unsupported dnf version.' ;; esac
         echo "This will use sudo to install the DNF $dnf_version config-manager plugin, configure GitHub's RPM repository, and install gh."
         ;;
