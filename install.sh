@@ -2,7 +2,7 @@
 set -euo pipefail
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 MODE=${1:-install}
-[[ $# -le 1 && ( $MODE == install || $MODE == --uninstall ) ]] || { echo "Usage: $0 [--uninstall]" >&2; exit 1; }
+[[ $# -le 1 && ( $MODE == install || $MODE == --with-gh || $MODE == --uninstall ) ]] || { echo "Usage: $0 [--with-gh|--uninstall]" >&2; exit 1; }
 : "${HOME:?HOME must be set}"
 CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
 [[ $HOME == /* && $CONFIG_HOME == /* ]] || { echo 'HOME and XDG_CONFIG_HOME must be absolute.' >&2; exit 1; }
@@ -108,3 +108,9 @@ link_file "$ROOT/scripts/pager.sh" "$MANAGED/pager.sh"
 if [[ $EARLY != "$LATE" ]]; then write_config "$EARLY" "$WORK/new-early"; fi
 write_config "$LATE" "$WORK/new-late"
 echo "Installed Git defaults. Private overrides: $HOME/.gitconfig.local"
+if [[ $MODE == --with-gh ]]; then
+    if ! "$ROOT/scripts/install-gh.sh"; then
+        echo 'Git configuration remains installed; GitHub CLI installation was not completed.' >&2
+        exit 1
+    fi
+fi

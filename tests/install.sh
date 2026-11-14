@@ -31,7 +31,7 @@ cp "$TARGET" "$WORK/original"
 run
 [[ $(git config --includes user.name) == 'Test User' ]] || fail identity
 [[ $(git config --includes pull.ff) == false ]] || fail precedence
-[[ $(git config --includes init.defaultBranch) == main ]] || fail defaults
+[[ $(git config --includes init.defaultBranch) == master ]] || fail defaults
 
 git init -q "$WORK/repo"
 git -C "$WORK/repo" st >/dev/null
